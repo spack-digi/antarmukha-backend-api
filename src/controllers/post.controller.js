@@ -4,7 +4,7 @@ const { Post, AllPost, Contact, Booking } = require("../models");
 exports.createPost = async (req, res, next) => {
   try {
     const { postId, date } = req.body;
-    
+
     if (!postId || !date) {
       return res.status(400).json({
         success: false,
@@ -35,7 +35,6 @@ exports.getAllPost = async (req, res, next) => {
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
-
     const offset = (page - 1) * limit;
 
     const { count, rows: allPost } = await Post.findAndCountAll({
@@ -43,22 +42,27 @@ exports.getAllPost = async (req, res, next) => {
       offset,
       distinct: true,
 
+      // filter only Post table
+      where: {
+        date: {
+          [Op.gte]: new Date(),
+        },
+      },
+
       include: [
         {
           model: AllPost,
           as: "AllPosts",
-          order: [["date", "ASC"]],
+          required: false,
         },
       ],
 
       order: [["date", "DESC"]],
     });
 
-    return res.status(200).json({
+    res.status(200).json({
       success: true,
-      message: "All Posts Fetched Successfully",
       data: allPost,
-
       pagination: {
         totalRecords: count,
         currentPage: page,
@@ -67,6 +71,7 @@ exports.getAllPost = async (req, res, next) => {
       },
     });
   } catch (error) {
+    console.log(error);
     next(error);
   }
 };

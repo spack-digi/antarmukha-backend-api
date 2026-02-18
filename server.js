@@ -16,6 +16,7 @@ app.use(
       "http://localhost:3000",
       "https://antharmukha-static-site.vercel.app",
       "http://localhost:5173",
+      "https://antarmuka-dashboard.vercel.app",
     ],
     credentials: true,
   }),
