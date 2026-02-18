@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "root",
+    "password": null,
+    "database": "anatarmukha_backend",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "test": {
+    "username": "root",
+    "password": null,
+    "database": "database_test",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "accuvmww_antharmukha",
+    "password": "yaPOb.JiC?3W",
+    "database": "accuvmww_antharmukha",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  }
+}
