@@ -4,11 +4,15 @@ const {
   getAllPost,
   getAllCounts,
   getAllPrograms,
+  deletePost,
+  updatePost,
 } = require("../controllers/post.controller");
 
 const router = express.Router();
 router.post("/", createPost);
 router.get("/", getAllPost);
+router.put("/:id", updatePost);
+router.delete("/:id", deletePost);
 router.get("/programs", getAllPrograms);
 router.get("/counts", getAllCounts);
 
@@ -88,6 +92,77 @@ router.get("/counts", getAllCounts);
  *                 currentPage: 1
  *                 totalPages: 2
  *                 limit: 10
+ *       500:
+ *         description: Server error
+ */
+
+/**
+ * @swagger
+ * /post/{postId}:
+ *   put:
+ *     summary: Update post schedule date
+ *     tags: [Posts]
+ *     parameters:
+ *       - in: path
+ *         name: postId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID of the post to update
+ *         example: 1
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - date
+ *             properties:
+ *               date:
+ *                 type: string
+ *                 format: date-time
+ *                 example: "2026-02-25T00:00:00.000Z"
+ *     responses:
+ *       200:
+ *         description: Post updated successfully
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: true
+ *               message: Post updated successfully
+ *       400:
+ *         description: Invalid postId or date missing
+ *       404:
+ *         description: Post not found
+ *       500:
+ *         description: Server error
+ */
+
+/**
+ * @swagger
+ * /post/{postId}:
+ *   delete:
+ *     summary: Delete a scheduled post by ID
+ *     tags: [Posts]
+ *     parameters:
+ *       - in: path
+ *         name: postId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Post ID to delete
+ *         example: 1
+ *     responses:
+ *       200:
+ *         description: Post deleted successfully
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: true
+ *               message: Post deleted successfully
+ *       404:
+ *         description: Post not found
  *       500:
  *         description: Server error
  */

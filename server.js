@@ -39,7 +39,7 @@ const options = {
         url: "http://localhost:8080",
       },
       {
-        url: "http://antharmukha-api.accurateweb.in",
+        url: "https://antharmukhaapi.spackdigi.com",
       },
     ],
   },

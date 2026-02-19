@@ -1,5 +1,6 @@
 const { Op } = require("sequelize");
 const { Post, AllPost, Contact, Booking } = require("../models");
+const { post } = require("../routes/post.routes");
 
 exports.createPost = async (req, res, next) => {
   try {
@@ -104,6 +105,88 @@ exports.getAllCounts = async (req, res, next) => {
         allContact,
         allBookings,
       },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.updatePost = async (req, res, next) => {
+  try {
+    const id = Number(req.params.id);
+    const { postId, date } = req.body;
+
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: "Valid id is required",
+      });
+    }
+
+    if (!postId && !date) {
+      return res.status(400).json({
+        success: false,
+        message: "postId or date is required",
+      });
+    }
+
+    const updateData = {};
+
+    if (postId) updateData.postId = postId; // change AllPosts id
+    if (date) updateData.date = new Date(date);
+
+    const [updatedCount] = await Post.update(updateData, {
+      where: { id }, // find using id = 67
+    });
+
+    if (!updatedCount) {
+      return res.status(404).json({
+        success: false,
+        message: "Post not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Post updated successfully",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.deletePost = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    // find post
+    const post = await Post.findByPk(id);
+
+    if (!post) {
+      return res.status(404).json({
+        success: false,
+        message: "Post not found",
+      });
+    }
+
+    // check if booking exists for this post
+    const bookingExists = await Booking.findOne({
+      where: { dateId: id }, // Booking.dateId → Post.id
+    });
+
+    if (bookingExists) {
+      return res.status(400).json({
+        success: false,
+        message: "Bookings exist for this post. You cannot delete this post.",
+      });
+    }
+
+    // delete post
+    await post.destroy();
+
+    return res.status(200).json({
+      success: true,
+      message: "Post deleted successfully",
     });
   } catch (error) {
     next(error);
