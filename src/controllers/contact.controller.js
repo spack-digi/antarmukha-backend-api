@@ -2,13 +2,14 @@ const { Contact } = require("../models");
 
 exports.createContact = async (req, res, next) => {
   try {
-    const { name, phone, programType } = req.body;
+    const { name, phone, programType, note } = req.body;
     console.log(req.body, "programType");
 
     const created = await Contact.create({
       name,
       phone,
       programType,
+      note,
     });
 
     res.status(201).json({
@@ -17,7 +18,7 @@ exports.createContact = async (req, res, next) => {
       data: created,
     });
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
 
